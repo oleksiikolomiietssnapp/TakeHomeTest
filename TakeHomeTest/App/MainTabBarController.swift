@@ -15,11 +15,11 @@ final class MainTabBarController: UITabBarController {
     }
 
     private func setupViewControllers() {
-        // Market Tab
-        let marketVC = CoinsListViewController()
-        let marketNav = UINavigationController(rootViewController: marketVC)
-        marketNav.tabBarItem = UITabBarItem(
-            title: "Market",
+        // Coins Tab
+        let coinsVC = CoinsListViewController()
+        let coinsNav = UINavigationController(rootViewController: coinsVC)
+        coinsNav.tabBarItem = UITabBarItem(
+            title: "Coins",
             image: UIImage(systemName: "chart.line.uptrend.xyaxis"),
             selectedImage: UIImage(systemName: "chart.line.uptrend.xyaxis.fill")
         )
@@ -33,7 +33,7 @@ final class MainTabBarController: UITabBarController {
             selectedImage: UIImage(systemName: "star.fill")
         )
 
-        viewControllers = [marketNav, favoritesNav]
+        viewControllers = [coinsNav, favoritesNav]
     }
 
     private func setupAppearance() {
