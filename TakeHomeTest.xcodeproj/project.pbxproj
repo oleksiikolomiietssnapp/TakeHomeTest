@@ -22,6 +22,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5312A1AE2D688184005B28BE /* Exceptions for "TakeHomeTestTests" folder in "TakeHomeTestTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				TakeHomeTest.xctestplan,
+			);
+			target = 5399D6152D67178F00532139 /* TakeHomeTestTests */;
+		};
 		5399D6282D67178F00532139 /* Exceptions for "TakeHomeTest" folder in "TakeHomeTest" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -42,6 +49,9 @@
 		};
 		5399D6192D67178F00532139 /* TakeHomeTestTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5312A1AE2D688184005B28BE /* Exceptions for "TakeHomeTestTests" folder in "TakeHomeTestTests" target */,
+			);
 			path = TakeHomeTestTests;
 			sourceTree = "<group>";
 		};
