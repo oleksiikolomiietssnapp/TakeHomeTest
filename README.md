@@ -1,6 +1,6 @@
 # iOS Take Home Test
 
-![Static Badge](https://img.shields.io/badge/coverage-93%2C0%25-mint) 
+![Static Badge](https://img.shields.io/badge/coverage-97%2C8%25-mint) 
 ![Static Badge](https://img.shields.io/badge/Deployment_Target-iOS%2015%2B-green)
 ![Static Badge](https://img.shields.io/badge/Swift-6.0-indigo)
 
@@ -22,8 +22,7 @@ The app fetches cryptocurrency data from the CoinRanking API and presents it in 
 - **async-await** for networking
 - **MVVM + Coordinators** for clean architecture
 - **URLSession** for API communication
-- **Unit Tests** with `XCTest`
-- **UI Tests** with `XCUITest`
+- **Unit Tests** and **UI Tests** with `XCTest`
 
 ## Instructions for Building and Running the Application
 
@@ -91,7 +90,7 @@ The app fetches cryptocurrency data from the CoinRanking API and presents it in 
 | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 20 18](https://github.com/user-attachments/assets/a5f1b171-c487-4394-a5f6-98541af58057) | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 21 55](https://github.com/user-attachments/assets/5f14fb9c-4722-4ec3-8122-4fe45f8d8d4e) | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 20 41](https://github.com/user-attachments/assets/a4ff4d88-7379-4a29-877a-087f008bc81b) |
 
 ## TODO:
-- Improve usage of "magic" values for consistency and reduce hardcoding.
+- Move metrics values to Constants for consistency and reduce hardcoding.
 - Break large views into reusable components for modularity.
 - Improve API handling and implement caching for performance.
 - Store favorites persistently (e.g., `CoreData` or `UserDefaults`).

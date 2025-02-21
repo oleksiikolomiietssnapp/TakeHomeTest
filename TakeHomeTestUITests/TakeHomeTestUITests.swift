@@ -8,92 +8,75 @@
 import XCTest
 
 final class TakeHomeTestUITests: XCTestCase {
-    func testDetails() {
+    func testAppFlows() {
         let app = XCUIApplication()
         app.launch()
 
-        sleep(1) // wait content to load
+        // Initial list loading
+        let bitcoinCell = app.tables.cells.matching(identifier: "Coin Bitcoin").firstMatch
+        XCTAssertTrue(bitcoinCell.waitForExistence(timeout: 5))
+        bitcoinCell.tap()
 
-        // Tap on the coin with the name "Coin Bitcoin"
-        app.tables.cells["Coin Bitcoin"].children(matching: .other).element(boundBy: 0).tap()
+        // Chart interactions
+        let chartCollectionView = app.collectionViews.firstMatch
+        XCTAssertTrue(chartCollectionView.waitForExistence(timeout: 5))
 
-        let collectionViewsQuery = app.collectionViews
+        let chartCells = chartCollectionView.cells
+        XCTAssertTrue(chartCells.count > 0, "Chart should have cells")
 
-        // Tap on timeframes with a sleep delay between each tap
-        collectionViewsQuery.buttons["Timeframe option: 24H"].tap()
-        sleep(1)  // Sleep for 1 second between taps
+        chartCells.firstMatch.swipeLeft()
+        Thread.sleep(forTimeInterval: 1)
+        chartCells.firstMatch.press(forDuration: 1.2)
 
-        collectionViewsQuery.buttons["Timeframe option: 1Y"].tap()
-        sleep(1)
+        // Timeframe testing
+        let timeframes = ["24H", "1Y", "3Y", "5Y", "3M", "7D", "30D"]
+        timeframes.forEach { timeframe in
+            chartCollectionView.buttons["Timeframe option: \(timeframe)"].tap()
+            Thread.sleep(forTimeInterval: 1)
+        }
 
-        collectionViewsQuery.buttons["Timeframe option: 3Y"].tap()
-        sleep(1)
-
-        collectionViewsQuery.buttons["Timeframe option: 5Y"].tap()
-        sleep(1)
-
-        collectionViewsQuery.buttons["Timeframe option: 3M"].tap()
-        sleep(1)
-
-        collectionViewsQuery.buttons["Timeframe option: 7D"].tap()
-        sleep(1)
-
-        collectionViewsQuery.buttons["Timeframe option: 30D"].tap()
-        sleep(1)
-
-        // Tap on the "Top 100 Coins" button in the navigation bar
+        // Return to main list
         app.navigationBars["Bitcoin"].buttons["Top 100 Coins"].tap()
 
-        let tablesQuery = app.tables
-        let element = tablesQuery.cells["Coin Bitcoin"].children(matching: .other).element(boundBy: 1)
-        element.swipeLeft()
+        // Favorite functionality testing
+        let bitcoinListCell = app.tables.cells["Coin Bitcoin"].children(matching: .other).element(boundBy: 1)
+        bitcoinListCell.swipeLeft()
 
-        // Interact with the "Favorite" button
-        let favoriteButton = tablesQuery.buttons["Favorite"]
+        let favoriteButton = app.tables.buttons["Favorite"]
         favoriteButton.tap()
 
-        element.children(matching: .other).element.swipeLeft()
+        bitcoinListCell.children(matching: .other).element.swipeLeft()
+        app.tables.buttons["Unfavorite"].tap()
 
-        // Interact with the "Unfavorite" button
-        tablesQuery.buttons["Unfavorite"].tap()
-
-        // Swipe left on the element and tap Favorite again
-        element.swipeLeft()
+        bitcoinListCell.swipeLeft()
         favoriteButton.tap()
 
-        // Tap on the tab bar button to go to "Favorites 1 items"
+        // Favorites tab navigation
         let tabBar = app.tabBars["Tab Bar"]
         tabBar.buttons["Favorites 1 items"].tap()
 
-        // Tap on the coin with the name "Favorite Coin Bitcoin"
+        // Check favorite detail
         app.tables.cells["Favorite Coin Bitcoin"].children(matching: .other).element(boundBy: 0).tap()
-
-        // Tap on the "Favorites" button in the navigation bar
         app.navigationBars["Bitcoin"].buttons["Favorites"].tap()
 
-        // Swipe on the favorite element and tap Unfavorite
-        tablesQuery.cells["Favorite Coin Bitcoin"].children(matching: .other).element(boundBy: 0).swipeLeft()
-        tablesQuery.buttons["Unfavorite"].tap()
+        // Remove from favorites
+        app.tables.cells["Favorite Coin Bitcoin"].children(matching: .other).element(boundBy: 0).swipeLeft()
+        app.tables.buttons["Unfavorite"].tap()
 
-        // Go back to "Top 100 Coins"
+        // Sort testing
         tabBar.buttons["Top 100 Coins"].tap()
-        
-        // Locate and tap the sort button
+
         let sortButton = app.navigationBars["Top 100 Coins"].buttons["sortOptionsButton"]
-        XCTAssertTrue(sortButton.exists, "Sort button should exist.")
+        XCTAssertTrue(sortButton.exists, "Sort button should exist")
         sortButton.tap()
 
-        // Select "Best Performance (24h)"
         let bestPerformanceOption = app.buttons["Best Performance (24h)"]
-        XCTAssertTrue(bestPerformanceOption.waitForExistence(timeout: 2), "Best Performance option should appear.")
+        XCTAssertTrue(bestPerformanceOption.waitForExistence(timeout: 2))
         bestPerformanceOption.tap()
 
-        // Tap the sort button again
         sortButton.tap()
-
-        // Select "Highest Price"
         let highestPriceOption = app.buttons["Highest Price"]
-        XCTAssertTrue(highestPriceOption.waitForExistence(timeout: 2), "Highest Price option should appear.")
+        XCTAssertTrue(highestPriceOption.waitForExistence(timeout: 2))
         highestPriceOption.tap()
     }
 }
