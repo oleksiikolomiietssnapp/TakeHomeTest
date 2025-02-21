@@ -9,15 +9,14 @@ import SwiftUI
 
 struct StatisticsCard: View {
     let title: String
-    let value: String
+    let value: Double
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.caption)
                 .foregroundColor(.secondary)
-
-            Text(value)
+            Text(Formatter.largeNumber.string(from: value))
                 .font(.system(.body, design: .rounded, weight: .semibold))
         }
         .frame(maxWidth: .infinity, alignment: .leading)

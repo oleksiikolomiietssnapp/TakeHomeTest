@@ -13,15 +13,26 @@ struct ChartContainer: View {
 
     private var chartColor: Color {
         guard let coinHistory = viewModel.coinHistory,
-            viewModel.selectedPoint == nil
+              viewModel.selectedPoint == nil
         else {
             return .blue
         }
 
-        if coinHistory.change >= 0 {
-            return Color.green
+        return coinHistory.change >= 0 ? .green : .red
+    }
+
+    var annotationPosition: AnnotationPosition {
+        guard let coinHistory = viewModel.coinHistory,
+              let selectedPoint = viewModel.selectedPoint
+        else {
+            return .automatic
+        }
+
+        if let index = coinHistory.points.firstIndex(of: selectedPoint),
+           index > coinHistory.points.count / 2 {
+            return .topTrailing
         } else {
-            return Color.red
+            return .topLeading
         }
     }
 
@@ -149,35 +160,18 @@ struct ChartContainer: View {
         .shadow(radius: 2)
     }
 
-    var annotationPosition: AnnotationPosition {
-        guard let coinHistory = viewModel.coinHistory,
-            let selectedPoint = viewModel.selectedPoint
-        else {
-            return .automatic
-        }
-
-        if let index = coinHistory.points.firstIndex(of: selectedPoint),
-            index > coinHistory.points.count / 2
-        {
-            return .topTrailing
-        } else {
-            return .topLeading
-        }
-    }
-
     private func updateSelectedPoint(at location: CGPoint, proxy: ChartProxy, geometry: GeometryProxy) {
         guard let coinHistory = viewModel.coinHistory,
-            let plotFrame = proxy.plotFrame
+              let plotFrame = proxy.plotFrame
         else { return }
 
         let xPosition = location.x - geometry[plotFrame].origin.x
         guard let date = proxy.value(atX: xPosition) as Date? else { return }
 
         // Find the closest data point
-        let closestPoint = coinHistory.points.min(
-            by: {
-                abs($0.date.timeIntervalSince(date)) < abs($1.date.timeIntervalSince(date))
-            })
+        let closestPoint = coinHistory.points.min {
+            abs($0.date.timeIntervalSince(date)) < abs($1.date.timeIntervalSince(date))
+        }
         viewModel.selectedPoint = closestPoint
     }
 }

@@ -14,14 +14,17 @@ extension NumberFormatter {
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 3
         formatter.usesGroupingSeparator = true
-        formatter.locale = Locale(identifier: "en_US") // Ensures proper formatting
+        formatter.locale = Locale(identifier: "en_US")  // Ensures proper formatting
         return formatter
     }()
 
-    static let largeNumberFormatter: NumberFormatter = {
+    static let largeStatisticNumberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
+        formatter.maximumFractionDigits = 1
+        formatter.minimumFractionDigits = 0
+        formatter.decimalSeparator = "."
+        formatter.groupingSeparator = "."
         return formatter
     }()
 }

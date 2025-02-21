@@ -8,12 +8,8 @@
 import SwiftUI
 
 struct StatisticsView: View {
-    let coin: Coin
-
-    private let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-    ]
+    private let coin: Coin
+    private let columns: [GridItem]
 
     var body: some View {
         VStack(spacing: 16) {
@@ -23,8 +19,8 @@ struct StatisticsView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             LazyVGrid(columns: columns, spacing: 16) {
-                StatisticsCard(title: "Market Cap", value: formatLargeNumber(coin.marketCap))
-                StatisticsCard(title: "Volume 24h", value: formatLargeNumber(coin.volume24h))
+                StatisticsCard(title: "Market Cap", value: coin.marketCap)
+                StatisticsCard(title: "Volume 24h", value: coin.volume24h)
             }
         }
         .padding()
@@ -33,17 +29,11 @@ struct StatisticsView: View {
         .shadow(radius: 2)
     }
 
-    private func formatLargeNumber(_ number: Double) -> String {
-        let numberFormatter = NumberFormatter.largeNumberFormatter
-        switch number {
-        case 1_000_000_000_000...:
-            return "\(numberFormatter.string(from: NSNumber(value: number / 1_000_000_000_000)) ?? "0")T"
-        case 1_000_000_000...:
-            return "\(numberFormatter.string(from: NSNumber(value: number / 1_000_000_000)) ?? "0")B"
-        case 1_000_000...:
-            return "\(numberFormatter.string(from: NSNumber(value: number / 1_000_000)) ?? "0")M"
-        default:
-            return numberFormatter.string(from: NSNumber(value: number)) ?? "0"
-        }
+    internal init(coin: Coin) {
+        self.coin = coin
+        self.columns = [
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+        ]
     }
 }

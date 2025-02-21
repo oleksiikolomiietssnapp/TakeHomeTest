@@ -1,6 +1,6 @@
 # iOS Take Home Test
 
-![Static Badge](https://img.shields.io/badge/coverage-92%2C2%25-mint) 
+![Static Badge](https://img.shields.io/badge/coverage-92%2C9%25-mint) 
 ![Static Badge](https://img.shields.io/badge/Deployment_Target-iOS%2017%2B-green)
 ![Static Badge](https://img.shields.io/badge/Swift-6.0.3-indigo)
 
