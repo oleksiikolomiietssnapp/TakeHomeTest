@@ -1,8 +1,8 @@
 # iOS Take Home Test
 
-![Static Badge](https://img.shields.io/badge/coverage-92%2C9%25-mint) 
-![Static Badge](https://img.shields.io/badge/Deployment_Target-iOS%2017%2B-green)
-![Static Badge](https://img.shields.io/badge/Swift-6.0.3-indigo)
+![Static Badge](https://img.shields.io/badge/coverage-93%2C0%25-mint) 
+![Static Badge](https://img.shields.io/badge/Deployment_Target-iOS%2015%2B-green)
+![Static Badge](https://img.shields.io/badge/Swift-6.0-indigo)
 
 ## Objective
 The purpose of this project is to demonstrate the ability to develop an iOS application that interacts with a public API, efficiently handles paginated data, and presents it in a user-friendly way.
@@ -28,9 +28,9 @@ The app fetches cryptocurrency data from the CoinRanking API and presents it in 
 ## Instructions for Building and Running the Application
 
 ### Prerequisites
-- **Xcode 16+**
-- **iOS 17+** Deployment Target
-- **Swift 6+**
+- **Xcode 16**
+- **iOS 15+** Deployment Target
+- **Swift 6**
 
 ### Steps
 1. Clone the repository:
@@ -97,6 +97,19 @@ The app fetches cryptocurrency data from the CoinRanking API and presents it in 
 - Store favorites persistently (e.g., `CoreData` or `UserDefaults`).
 - Add smooth animations and accessibility support.
 - Refine naming across the codebase for clarity and consistency.
-- Enhance UI testing capabilities to encompass a comprehensive range of edge scenarios.
+- Enhance UI testing capabilities to encompass a comprehensive range of edge scenarios. 
+- Implement caching to reduce repeated API calls.
   
+## Issues
+
+### API Rate Limit Exceeded  
+If you encounter the following error while fetching chart data:  
+```
+    Error fetching chart data: Rate limit exceeded - Please try again later
+```
+This means the API has reached its request limit. To resolve this:  
+- Wait for some time and try again later.  
+- Ensure you're not making excessive requests within a short period.  
+- If possible, use API keys with higher rate limits. 
+
 ---
