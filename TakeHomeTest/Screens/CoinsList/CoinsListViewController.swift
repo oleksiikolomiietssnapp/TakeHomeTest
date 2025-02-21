@@ -15,10 +15,20 @@ final class CoinsListViewController: UIViewController {
 
     // MARK: - Properties
     weak var coordinator: CoinsListCoordinator?
-    private var viewModel = CoinsListViewModel()
+    private var viewModel: CoinsListViewModel
     private let refreshControl = UIRefreshControl()
     lazy private var tableView = UITableView()
     lazy private var dataSource: DataSource = createDataSource()
+
+    // MARK: - Initialization
+    init(viewModel: CoinsListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Lifecycle
     override func viewDidLoad() {

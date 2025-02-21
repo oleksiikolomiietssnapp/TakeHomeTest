@@ -52,7 +52,7 @@ struct Coin {
     }
 }
 
-extension Coin: Codable {
+extension Coin: Decodable {
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 

@@ -11,19 +11,22 @@ import UIKit
 class CoinsListCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
+    let api: CoinRankingAPIProtocol
 
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, api: CoinRankingAPIProtocol) {
         self.navigationController = navigationController
+        self.api = api
     }
 
     func start() {
-        let coinsListVC = CoinsListViewController()
+        let viewModel = CoinsListViewModel(api: api)
+        let coinsListVC = CoinsListViewController(viewModel: viewModel)
         coinsListVC.coordinator = self
         navigationController.setViewControllers([coinsListVC], animated: false)
     }
 
     func showItemDetail(_ coin: Coin) {
-        let detailViewModel = CoinDetailViewModel(coin: coin)
+        let detailViewModel = CoinDetailViewModel(coin: coin, api: api)
         let detailView = CoinDetailView(viewModel: detailViewModel)
         let detailVC = UIHostingController(rootView: detailView)
         detailVC.hidesBottomBarWhenPushed = true

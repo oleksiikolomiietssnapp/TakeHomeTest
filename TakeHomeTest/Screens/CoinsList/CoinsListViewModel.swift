@@ -24,14 +24,14 @@ final class CoinsListViewModel: ObservableObject {
     private let favoriteManager: FavoritesManaging
     private let itemsPerPage = 20
     private let maxPages = 5
-    private let api: CoinRankingAPIProtocol.Type
+    private let api: CoinRankingAPIProtocol
     private var isFetching = false
 
     // MARK: - Initialization
     init(
         initialState: CoinsListState = .initial,
         favoriteManager: FavoritesManaging = FavoritesManager.shared,
-        api: CoinRankingAPIProtocol.Type = CoinRankingAPI.self
+        api: CoinRankingAPIProtocol
     ) {
         self.state = initialState
         self.favoriteManager = favoriteManager

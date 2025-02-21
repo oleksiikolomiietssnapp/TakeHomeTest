@@ -12,19 +12,20 @@ import XCTest
 final class CoinDetailViewModelTests: XCTestCase {
     var sut: CoinDetailViewModel!
     let testCoin = Coin.fake(id: "test-uuid", name: "Bitcoin", symbol: "BTC")
+    private var api: MockCoinRankingAPI!
 
     override func setUp() {
         super.setUp()
-        MockCoinRankingAPI.reset()
+        api = MockCoinRankingAPI()
         sut = CoinDetailViewModel(
             coin: testCoin,
-            api: MockCoinRankingAPI.self
+            api: api
         )
     }
 
     override func tearDown() {
         sut = nil
-        MockCoinRankingAPI.reset()
+        api = nil
         super.tearDown()
     }
 
@@ -51,7 +52,7 @@ final class CoinDetailViewModelTests: XCTestCase {
             CoinHistoryPoint.fake(timestamp: 2000, price: 200),
         ]
         let mockHistory = CoinHistory(change: 10.0, points: mockPoints)
-        MockCoinRankingAPI.mockHistory = mockHistory
+        api.mockHistory = mockHistory
 
         // When
         await sut.fetchChartData()
@@ -64,7 +65,7 @@ final class CoinDetailViewModelTests: XCTestCase {
 
     func testFailedDataFetch() async {
         // Given
-        MockCoinRankingAPI.mockError = MockError.testError
+        api.mockError = MockError.testError
 
         // When
         await sut.fetchChartData()
@@ -79,7 +80,7 @@ final class CoinDetailViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Loading state changes")
 
         // When
-        MockCoinRankingAPI.needsDelay = true
+        api.needsDelay = true
 
         Task {
             await sut.fetchChartData()
@@ -120,7 +121,7 @@ final class CoinDetailViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Timeframe didSet")
         let mockPoints = [CoinHistoryPoint.fake(timestamp: 1000, price: 100)]
         let mockHistory = CoinHistory(change: 5.0, points: mockPoints)
-        MockCoinRankingAPI.mockHistory = mockHistory
+        api.mockHistory = mockHistory
 
         // When
         Task {

@@ -25,3 +25,17 @@ extension CoinRankingAPI {
         }
     }
 }
+
+#if DEBUG
+// Testing helpers
+extension CoinRankingAPI.Endpoint: Equatable {
+    static func == (lhs: CoinRankingAPI.Endpoint, rhs: CoinRankingAPI.Endpoint) -> Bool {
+        switch (lhs, rhs) {
+        case (.coins, .coins): return true
+        case (.coinDetail, .coinDetail): return true
+        case (.coinHistory, .coinHistory): return true
+        default: return false
+        }
+    }
+}
+#endif

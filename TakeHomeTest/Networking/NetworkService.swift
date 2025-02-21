@@ -5,16 +5,19 @@
 //  Created by Oleksii Kolomiiets on 20.02.2025.
 //
 
-
 import Foundation
 
+protocol NetworkServicing {
+    func perform<T: APIRequest>(_ request: T) async throws -> T.Response
+}
+
 // MARK: - Network Service
-final class NetworkService {
+final class NetworkService: NetworkServicing {
     private let baseURL: String
     private let apiKey: String
     private let session: URLSession
 
-    init(baseURL: String, apiKey: String, session: URLSession = .shared) {
+    init(baseURL: String = "https://api.coinranking.com/v2", apiKey: String, session: URLSession = .shared) {
         self.baseURL = baseURL
         self.apiKey = apiKey
         self.session = session

@@ -19,18 +19,10 @@ struct Coins {
     }
 }
 
-extension Coins: Codable {
+extension Coins: Decodable {
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let nestedContainer = try container.nestedContainer(keyedBy: DataCodingKeys.self, forKey: .data)
         self.coins = try nestedContainer.decode([Coin].self, forKey: .coins)
-    }
-
-    func encode(to encoder: any Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        var nestedContainer = container.nestedContainer(
-            keyedBy: DataCodingKeys.self,
-            forKey: .data)
-        try nestedContainer.encode(coins, forKey: .coins)
     }
 }

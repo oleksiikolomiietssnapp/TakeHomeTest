@@ -11,9 +11,14 @@ import UIKit
 class FavoritesCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
+    let api: CoinRankingAPIProtocol
 
-    init(navigationController: UINavigationController) {
+    init(
+        navigationController: UINavigationController,
+        api: CoinRankingAPIProtocol
+    ) {
         self.navigationController = navigationController
+        self.api = api
     }
 
     func start() {
@@ -23,7 +28,7 @@ class FavoritesCoordinator: Coordinator {
     }
 
     func showItemDetail(_ coin: Coin) {
-        let detailViewModel = CoinDetailViewModel(coin: coin)
+        let detailViewModel = CoinDetailViewModel(coin: coin, api: api)
         let detailView = CoinDetailView(viewModel: detailViewModel)
         let detailVC = UIHostingController(rootView: detailView)
         detailVC.hidesBottomBarWhenPushed = true

@@ -27,30 +27,57 @@ The app fetches cryptocurrency data from the CoinRanking API and presents it in 
 
 ### Steps
 1. Clone the repository:
+
    ```sh
    git clone https://github.com/oleksiikolomiietssnapp/ios-take-home-test.git
    cd ios-take-home-test
    ```
+   
 2. Open the project in Xcode:
    ```sh
    open TakeHomeTest.xcodeproj
    ```
-3. Run the application on the iOS Simulator or a physical device.
+   
+3. Export the API key:
+    If you don’t already have a `~/.zshrc` file, you can create it by running the following command:
+    ```sh
+    touch ~/.zshrc
+    ```
+    
+    Then, add your API key to the `~/.zshrc` file:
+    ```sh
+    echo 'export API_KEY=your_api_key_here' >> ~/.zshrc
+    ```
+    
+    Afterward, run the following to reload the environment variables:
+    ```sh
+    source ~/.zshrc
+    ```
+    
+4. Run the application on the iOS Simulator or a physical device.
 
 ## Assumptions & Decisions
 - **Pagination**: Implemented client-side pagination to optimize API requests and improve performance.
 - **Networking**: Used async/await for clearer and more concise networking code.
 - **Charts**: Leveraged `SwiftUI Charts` for data visualization.
+- **Securing API Key**: The API key is securely stored in the system's environment variables, retrieved from `Info.plist` at runtime to avoid hardcoding sensitive information in the codebase.
 
 ## Challenges & Solutions
 - **Efficient Pagination**: Used `UITableViewDiffableDataSource` to manage smooth updates.
 - **Mixing UIKit & SwiftUI**: Embedded SwiftUI views inside `UIHostingController` for seamless integration.
 - **Error Handling**: Improved error messaging with OSLog to guide users in case of API failures.
+- **API Key Security**: Ensured that the API key is not exposed in source control or hardcoded in the application, utilizing environment variables and `Info.plist` for runtime retrieval.
 
 ## Testing
-- **Unit Tests**: Coverage for `FavoritesManager` and `NetworkService`.
-- **Mock Networking**: Utilized `URLProtocol` to simulate API responses.
-
+- **Unit Tests**: Coverage includes `FavoritesManager`, `NetworkService`, and `ViewModels`. 
+  - All services and managers are thoroughly tested to ensure correct functionality.
+  - View models are tested to validate proper binding and state management.
+- **Mocks**: 
+  - `MockNetworkError`: Used to simulate network errors during tests, ensuring proper error handling.
+  - `MockFavoritesManager`: Provides a mock implementation of the favorites manager to test the app's ability to handle and store favorites without needing real data.
+  - `MockCoinRankingAPI`: A mock API implementation to simulate real API calls and test how the app interacts with network data without making live requests.
+  - `MockURLProtocol` to simulate API responses for testing the networking layer without making real requests.
+  
 ## Screenshots
 | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 20 13](https://github.com/user-attachments/assets/1605f467-ac6a-499e-a5b3-53a7f65d15f2) | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 20 37](https://github.com/user-attachments/assets/1cf5d393-eae1-4694-a128-68e72af8bd19) | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 20 33](https://github.com/user-attachments/assets/fa46be1e-7bca-486f-8166-b58b5cbc8949) |
 | --- | --- | --- |

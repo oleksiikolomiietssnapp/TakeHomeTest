@@ -22,7 +22,7 @@ final class CoinDetailViewModel: ObservableObject {
     @Published var selectedPoint: CoinHistoryPoint?
 
     public let coin: Coin
-    private let api: CoinRankingAPIProtocol.Type
+    private let api: CoinRankingAPIProtocol
 
     var timeframes: [Timeframe] {
         Timeframe.allCases
@@ -30,7 +30,7 @@ final class CoinDetailViewModel: ObservableObject {
 
     init(
         coin: Coin,
-        api: CoinRankingAPIProtocol.Type = CoinRankingAPI.self
+        api: CoinRankingAPIProtocol
     ) {
         self.coin = coin
         self.api = api

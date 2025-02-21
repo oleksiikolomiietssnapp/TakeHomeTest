@@ -13,22 +13,23 @@ final class CoinsListViewModelTests: XCTestCase {
     // MARK: - Properties
     private var sut: CoinsListViewModel!
     private var mockFavoritesManager: MockFavoritesManager!
+    private var api: MockCoinRankingAPI!
 
     // MARK: - Test Lifecycle
     override func setUp() {
         super.setUp()
         mockFavoritesManager = MockFavoritesManager()
-        MockCoinRankingAPI.reset()
+        api = MockCoinRankingAPI()
         sut = CoinsListViewModel(
             favoriteManager: mockFavoritesManager,
-            api: MockCoinRankingAPI.self
+            api: api
         )
     }
 
     override func tearDown() {
         sut = nil
         mockFavoritesManager = nil
-        MockCoinRankingAPI.reset()
+        api = nil
         super.tearDown()
     }
 
@@ -50,7 +51,7 @@ final class CoinsListViewModelTests: XCTestCase {
         XCTAssertEqual(sut.coins.count, 3)
 
         // When
-        MockCoinRankingAPI.mockCoins = .init(coins: [])
+        api.mockCoins = .init(coins: [])
         sut.reset()
 
         // Then
@@ -62,7 +63,7 @@ final class CoinsListViewModelTests: XCTestCase {
     func testLoadInitialData_LoadsFirstPage() async {
         // Given
         let mockCoins = createMockCoins(count: 3)
-        MockCoinRankingAPI.mockCoins = .init(coins: mockCoins)
+        api.mockCoins = .init(coins: mockCoins)
 
         // When
         await sut.loadInitialData()
@@ -76,7 +77,7 @@ final class CoinsListViewModelTests: XCTestCase {
     func testLoadNextPage_WhenHasMorePages_LoadsNewPage() async {
         // Given
         let newCoins = createMockCoins(count: 20)
-        MockCoinRankingAPI.mockCoins = .init(coins: newCoins)
+        api.mockCoins = .init(coins: newCoins)
 
         // When
         let result = await sut.loadNextPage()
@@ -103,7 +104,7 @@ final class CoinsListViewModelTests: XCTestCase {
     func testLoadNextPage_WhenGetApiError() async {
         // Given
         sut.inject(coins: createMockCoins(count: 100))
-        MockCoinRankingAPI.mockError = MockError.testError
+        api.mockError = MockError.testError
 
         // When
         for _ in 0...5 {
@@ -136,7 +137,7 @@ final class CoinsListViewModelTests: XCTestCase {
         // Given
         let mockCoins = createMockCoins(count: 3)
         sut.inject(coins: mockCoins)
-        MockCoinRankingAPI.mockCoins = .init(coins: mockCoins)
+        api.mockCoins = .init(coins: mockCoins)
 
         // When
         await sut.filterCoins(with: "")

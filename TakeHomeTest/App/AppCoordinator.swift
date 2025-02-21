@@ -21,12 +21,15 @@ final class AppCoordinator: TabCoordinator {
     /// Array of child coordinators managed by this coordinator.
     var childCoordinators: [Coordinator] = []
 
+    var api: CoinRankingAPIProtocol
+
     // MARK: - Initialization
 
     /// Initializes the app coordinator with new navigation and tab bar controllers.
-    public init() {
+    public init(api: CoinRankingAPIProtocol) {
         self.navigationController = UINavigationController()
         self.tabBarController = UITabBarController()
+        self.api = api
     }
 
     // MARK: - Coordinator Methods
@@ -35,8 +38,8 @@ final class AppCoordinator: TabCoordinator {
     /// Creates and configures child coordinators for different sections of the app.
     public func start() {
         // Create child coordinators
-        let coinsListCoordinator = CoinsListCoordinator(navigationController: UINavigationController())
-        let favoritesCoordinator = FavoritesCoordinator(navigationController: UINavigationController())
+        let coinsListCoordinator = CoinsListCoordinator(navigationController: UINavigationController(), api: api)
+        let favoritesCoordinator = FavoritesCoordinator(navigationController: UINavigationController(), api: api)
 
         // Store child coordinators
         childCoordinators = [coinsListCoordinator, favoritesCoordinator]

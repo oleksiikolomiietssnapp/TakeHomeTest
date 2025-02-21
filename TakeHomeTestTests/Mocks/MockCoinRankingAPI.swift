@@ -14,19 +14,12 @@ enum MockError: Error {
 }
 
 final class MockCoinRankingAPI: CoinRankingAPIProtocol {
-    static var mockCoins: Coins = Coins(coins: [])
-    static var mockHistory: CoinHistory?
-    static var mockError: Error?
-    static var needsDelay: Bool = false
+    var mockCoins: Coins = Coins(coins: [])
+    var mockHistory: CoinHistory?
+    var mockError: Error?
+    var needsDelay: Bool = false
 
-    static func reset() {
-        mockError = nil
-        mockHistory = nil
-        needsDelay = false
-        mockCoins = .init(coins: [])
-    }
-
-    static func fetchCoins(offset: Int, limit: Int) async throws -> Coins {
+    func fetchCoins(offset: Int, limit: Int) async throws -> Coins {
         if needsDelay {
             try await Task.sleep(nanoseconds: 100_000_000)
         }
@@ -38,7 +31,7 @@ final class MockCoinRankingAPI: CoinRankingAPIProtocol {
         return mockCoins
     }
 
-    static func fetchCoinHistory(id: String, timePeriod: String) async throws -> CoinHistory {
+    func fetchCoinHistory(id: String, timePeriod: String) async throws -> CoinHistory {
         if needsDelay {
             try await Task.sleep(nanoseconds: 100_000_000)
         }
