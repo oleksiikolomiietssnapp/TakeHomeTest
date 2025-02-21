@@ -47,4 +47,9 @@ final class MockFavoritesManager: FavoritesManaging {
         notifyObserversCalled = true
         observers.forEach { $0(favorites) }
     }
+
+    func inject(coins: [Coin]) {
+        favorites = coins
+        notifyObservers()
+    }
 }
