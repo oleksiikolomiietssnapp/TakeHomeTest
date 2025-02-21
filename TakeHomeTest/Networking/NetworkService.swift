@@ -81,22 +81,3 @@ final class NetworkService {
         return try decoder.decode(T.self, from: data)
     }
 }
-
-// MARK: - Testing Support
-#if DEBUG
-extension NetworkService {
-    static func mock(
-        baseURL: String = "https://api.test.com",
-        apiKey: String = "test-api-key"
-    ) -> NetworkService {
-        NetworkService(baseURL: baseURL, apiKey: apiKey)
-    }
-}
-
-extension APIRequest {
-    func mock() async throws -> Response {
-        let service = NetworkService.mock()
-        return try await service.perform(self)
-    }
-}
-#endif

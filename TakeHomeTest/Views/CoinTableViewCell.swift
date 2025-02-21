@@ -11,7 +11,7 @@ import SwiftUI
 final class CoinTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        // Remove default cell selection style
+        // Removes default cell selection style
         selectionStyle = .none
     }
 

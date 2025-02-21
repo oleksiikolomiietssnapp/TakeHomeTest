@@ -17,4 +17,11 @@ extension NumberFormatter {
         formatter.locale = Locale(identifier: "en_US") // Ensures proper formatting
         return formatter
     }()
+
+    static let largeNumberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }()
 }

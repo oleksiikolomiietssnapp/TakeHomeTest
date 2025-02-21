@@ -8,7 +8,6 @@
 import Foundation
 @testable import TakeHomeTest
 
-// Create a mock API
 final class MockCoinRankingAPI: CoinRankingAPIProtocol {
     static var mockCoins: Coins = Coins(coins: [])
     static var shouldThrowError = false

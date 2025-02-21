@@ -136,7 +136,6 @@ extension CoinsListViewController: UITableViewDelegate {
         _ tableView: UITableView,
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
-        // Get the item from the snapshot
         guard let coin = dataSource.itemIdentifier(for: indexPath) else { return nil }
 
         let configuration: UISwipeActionsConfiguration

@@ -154,7 +154,6 @@ final class FavoritesManagerTests: XCTestCase {
     // MARK: - Memory Management Tests
     
     func test_addingMultipleObservers_doesNotCauseMemoryLeak() {
-        // This test ensures we're not creating strong reference cycles
         weak var weakManager: FavoritesManager?
         autoreleasepool {
             let manager = FavoritesManager.shared

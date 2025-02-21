@@ -7,9 +7,6 @@
 
 import Foundation
 
-extension CoinHistory: Hashable { }
-extension CoinHistoryPoint: Hashable { }
-
 struct CoinHistory {
     let change: Double
     let points: [CoinHistoryPoint]
@@ -23,6 +20,7 @@ struct CoinHistory {
         case data
     }
 }
+
 extension CoinHistory: Decodable {
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -32,25 +30,4 @@ extension CoinHistory: Decodable {
     }
 }
 
-struct CoinHistoryPoint {
-    let id: UUID
-    let timestamp: TimeInterval
-    let price: Double?
-
-    var date: Date {
-        Date(timeIntervalSince1970: timestamp)
-    }
-}
-
-extension CoinHistoryPoint: Decodable {
-    enum CodingKeys: CodingKey {
-        case timestamp, price
-    }
-
-    init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = UUID()
-        self.timestamp = try container.decode(Double.self, forKey: .timestamp)
-        self.price = container.decodeNumericIfPresent(Double.self, forKey: .price)
-    }
-}
+extension CoinHistory: Hashable {}

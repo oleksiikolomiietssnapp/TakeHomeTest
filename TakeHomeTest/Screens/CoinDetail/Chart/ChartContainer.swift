@@ -93,7 +93,7 @@ struct ChartContainer: View {
                             Text("No data available")
                                 .foregroundColor(.secondary)
                         }
-                        .opacity(0) // Makes the rectangle invisible
+                        .opacity(0)  // Makes the rectangle invisible
                 }
             }
             .frame(height: 150)
