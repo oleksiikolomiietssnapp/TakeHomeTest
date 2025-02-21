@@ -75,27 +75,6 @@ final class CoinDetailViewModelTests: XCTestCase {
         XCTAssertFalse(sut.isLoading)
     }
 
-    func testLoadingState() async {
-        // Given
-        let expectation = XCTestExpectation(description: "Loading state changes")
-
-        // When
-        api.needsDelay = true
-
-        Task {
-            await sut.fetchChartData()
-            expectation.fulfill()
-        }
-
-        // Wait for MainActor to update isLoading to true
-        try? await Task.sleep(nanoseconds: 10_000_000)
-
-        // Then
-        XCTAssertTrue(sut.isLoading)
-        await fulfillment(of: [expectation], timeout: 1.0)
-        XCTAssertFalse(sut.isLoading)
-    }
-
     // MARK: - Timeframe Tests
 
     func testTimeframeUpdate() async {

@@ -26,6 +26,13 @@
   },
   "testTargets" : [
     {
+      "target" : {
+        "containerPath" : "container:TakeHomeTest.xcodeproj",
+        "identifier" : "5312A1B82D689D17005B28BE",
+        "name" : "TakeHomeTestUITests"
+      }
+    },
+    {
       "parallelizable" : true,
       "target" : {
         "containerPath" : "container:TakeHomeTest.xcodeproj",

@@ -19,6 +19,8 @@ struct CoinDetailView: View {
                     ForEach(viewModel.timeframes, id: \.self) { timeframe in
                         Text(timeframe.title)
                             .tag(timeframe)
+                            .accessibilityLabel("Timeframe option: \(timeframe.title)") // Adding label for each timeframe option
+                            .accessibilityValue(timeframe.title) // Describing the value of each option
                     }
                 }
                 .pickerStyle(.segmented)

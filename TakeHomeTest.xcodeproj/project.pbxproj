@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
+		5312A1BF2D689D17005B28BE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5399D5F82D67178D00532139 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5399D5FF2D67178D00532139;
+			remoteInfo = TakeHomeTest;
+		};
 		5399D6172D67178F00532139 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5399D5F82D67178D00532139 /* Project object */;
@@ -17,18 +24,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5312A1AD2D68812E005B28BE /* TakeHomeTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TakeHomeTest.xctestplan; sourceTree = "<group>"; };
+		5312A1B92D689D17005B28BE /* TakeHomeTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TakeHomeTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5399D6002D67178D00532139 /* TakeHomeTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TakeHomeTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5399D6162D67178F00532139 /* TakeHomeTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TakeHomeTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		5312A1AE2D688184005B28BE /* Exceptions for "TakeHomeTestTests" folder in "TakeHomeTestTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				TakeHomeTest.xctestplan,
-			);
-			target = 5399D6152D67178F00532139 /* TakeHomeTestTests */;
-		};
 		5399D6282D67178F00532139 /* Exceptions for "TakeHomeTest" folder in "TakeHomeTest" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -39,6 +41,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		5312A1BA2D689D17005B28BE /* TakeHomeTestUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TakeHomeTestUITests;
+			sourceTree = "<group>";
+		};
 		5399D6022D67178D00532139 /* TakeHomeTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -49,15 +56,19 @@
 		};
 		5399D6192D67178F00532139 /* TakeHomeTestTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				5312A1AE2D688184005B28BE /* Exceptions for "TakeHomeTestTests" folder in "TakeHomeTestTests" target */,
-			);
 			path = TakeHomeTestTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5312A1B62D689D17005B28BE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5399D5FD2D67178D00532139 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -80,7 +91,9 @@
 			children = (
 				5399D6022D67178D00532139 /* TakeHomeTest */,
 				5399D6192D67178F00532139 /* TakeHomeTestTests */,
+				5312A1BA2D689D17005B28BE /* TakeHomeTestUITests */,
 				5399D6012D67178D00532139 /* Products */,
+				5312A1AD2D68812E005B28BE /* TakeHomeTest.xctestplan */,
 			);
 			sourceTree = "<group>";
 		};
@@ -89,6 +102,7 @@
 			children = (
 				5399D6002D67178D00532139 /* TakeHomeTest.app */,
 				5399D6162D67178F00532139 /* TakeHomeTestTests.xctest */,
+				5312A1B92D689D17005B28BE /* TakeHomeTestUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -96,6 +110,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5312A1B82D689D17005B28BE /* TakeHomeTestUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5312A1C12D689D17005B28BE /* Build configuration list for PBXNativeTarget "TakeHomeTestUITests" */;
+			buildPhases = (
+				5312A1B52D689D17005B28BE /* Sources */,
+				5312A1B62D689D17005B28BE /* Frameworks */,
+				5312A1B72D689D17005B28BE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5312A1C02D689D17005B28BE /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5312A1BA2D689D17005B28BE /* TakeHomeTestUITests */,
+			);
+			name = TakeHomeTestUITests;
+			packageProductDependencies = (
+			);
+			productName = TakeHomeTestUITests;
+			productReference = 5312A1B92D689D17005B28BE /* TakeHomeTestUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		5399D5FF2D67178D00532139 /* TakeHomeTest */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5399D6292D67178F00532139 /* Build configuration list for PBXNativeTarget "TakeHomeTest" */;
@@ -151,6 +188,10 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					5312A1B82D689D17005B28BE = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 5399D5FF2D67178D00532139;
+					};
 					5399D5FF2D67178D00532139 = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -176,11 +217,19 @@
 			targets = (
 				5399D5FF2D67178D00532139 /* TakeHomeTest */,
 				5399D6152D67178F00532139 /* TakeHomeTestTests */,
+				5312A1B82D689D17005B28BE /* TakeHomeTestUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5312A1B72D689D17005B28BE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5399D5FE2D67178D00532139 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -198,6 +247,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5312A1B52D689D17005B28BE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5399D5FC2D67178D00532139 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -215,6 +271,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5312A1C02D689D17005B28BE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5399D5FF2D67178D00532139 /* TakeHomeTest */;
+			targetProxy = 5312A1BF2D689D17005B28BE /* PBXContainerItemProxy */;
+		};
 		5399D6182D67178F00532139 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5399D5FF2D67178D00532139 /* TakeHomeTest */;
@@ -223,6 +284,40 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		5312A1C22D689D17005B28BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FAJ4V9RHA6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oleksiikolommiets.com.TakeHomeTestUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TakeHomeTest;
+			};
+			name = Debug;
+		};
+		5312A1C32D689D17005B28BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FAJ4V9RHA6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oleksiikolommiets.com.TakeHomeTestUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TakeHomeTest;
+			};
+			name = Release;
+		};
 		5399D62A2D67178F00532139 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -449,6 +544,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5312A1C12D689D17005B28BE /* Build configuration list for PBXNativeTarget "TakeHomeTestUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5312A1C22D689D17005B28BE /* Debug */,
+				5312A1C32D689D17005B28BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		5399D5FB2D67178D00532139 /* Build configuration list for PBXProject "TakeHomeTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

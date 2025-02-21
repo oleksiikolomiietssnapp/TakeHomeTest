@@ -62,8 +62,10 @@ final class AppCoordinator: TabCoordinator {
         FavoritesManager.shared.addObserver { coins in
             if coins.isEmpty {
                 favoritesCoordinator.navigationController.tabBarItem.badgeValue = nil
+                favoritesCoordinator.navigationController.tabBarItem.accessibilityLabel = "Favorites no items"
             } else {
                 favoritesCoordinator.navigationController.tabBarItem.badgeValue = "\(coins.count)"
+                favoritesCoordinator.navigationController.tabBarItem.accessibilityLabel = "Favorites \(coins.count) items"
             }
         }
 

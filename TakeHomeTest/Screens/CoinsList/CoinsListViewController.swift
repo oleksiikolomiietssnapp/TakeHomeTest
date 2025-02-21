@@ -78,6 +78,7 @@ final class CoinsListViewController: UIViewController {
             cell.contentConfiguration = UIHostingConfiguration {
                 CoinCellView(coin: coin)
             }
+            cell.accessibilityLabel = "Coin \(coin.name)"
 
             return cell
         }
@@ -86,7 +87,7 @@ final class CoinsListViewController: UIViewController {
     private func setupNavigationBar() {
         title = "Top 100 Coins"
         navigationController?.navigationBar.prefersLargeTitles = true
-        
+
         let menu = UIMenu(title: "Sort Options", children: [
             UIAction(
                 title: "Highest Price",
@@ -110,6 +111,9 @@ final class CoinsListViewController: UIViewController {
             primaryAction: nil,
             menu: menu
         )
+
+        // accessibility identifier for UI testing
+        barButton.accessibilityIdentifier = "sortOptionsButton"
 
         navigationItem.rightBarButtonItem = barButton
     }
@@ -151,25 +155,13 @@ extension CoinsListViewController: UITableViewDelegate {
         let configuration: UISwipeActionsConfiguration
 
         if viewModel.isFavorite(coin) {
-            // Unfavorite action
-            let unfavoriteAction = UIContextualAction(style: .normal, title: "Delete") { [weak self] _, _, completion in
+            configuration = SwipeActions.createUnfavoriteConfiguration { [weak self] in
                 self?.removeFromFavorite(coin)
-                completion(true)
             }
-            unfavoriteAction.image = UIImage(systemName: "heart.slash")
-            unfavoriteAction.backgroundColor = .systemGray
-
-            configuration = UISwipeActionsConfiguration(actions: [unfavoriteAction])
         } else {
-            // Favorite action
-            let editAction = UIContextualAction(style: .normal, title: "Like") { [weak self] _, _, completion in
-                self?.addToFavoritesItem(coin)
-                completion(true)
-            }
-            editAction.image = UIImage(systemName: "heart")
-            editAction.backgroundColor = .systemBlue
-
-            configuration = UISwipeActionsConfiguration(actions: [editAction])
+            configuration = SwipeActions.createFavoriteConfiguration { [weak self] in
+                    self?.addToFavoritesItem(coin)
+                }
         }
 
         configuration.performsFirstActionWithFullSwipe = false

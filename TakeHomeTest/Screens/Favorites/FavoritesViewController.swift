@@ -69,7 +69,8 @@ final class FavoritesViewController: UIViewController {
 
     private func createDataSource() -> DataSource {
         DataSource(tableView: tableView) { tableView, indexPath, coin in
-            guard let cell = tableView.dequeueReusableCell(
+            guard
+                let cell = tableView.dequeueReusableCell(
                     withIdentifier: "CoinCell", for: indexPath
                 ) as? CoinTableViewCell
             else {
@@ -79,7 +80,8 @@ final class FavoritesViewController: UIViewController {
             cell.contentConfiguration = UIHostingConfiguration {
                 CoinCellView(coin: coin)
             }
-            
+            cell.accessibilityLabel = "Favorite Coin \(coin.name)"
+
             return cell
         }
     }
@@ -113,17 +115,10 @@ extension FavoritesViewController: UITableViewDelegate {
     {
         guard let coin = dataSource.itemIdentifier(for: indexPath) else { return nil }
 
-        let unfavoriteAction = UIContextualAction(
-            style: .destructive,
-            title: "Unfavorite"
-        ) { [weak self] _, _, completion in
+        return SwipeActions.createUnfavoriteConfiguration(style: .destructive) { [weak self] in
             self?.viewModel.removeFavorite(coin)
             self?.updateUI()
-            completion(true)
         }
-        unfavoriteAction.backgroundColor = .systemRed
-
-        return UISwipeActionsConfiguration(actions: [unfavoriteAction])
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
