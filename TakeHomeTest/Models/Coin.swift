@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Coins: Codable {
+struct Coins {
     let coins: [Coin]
 
     enum CodingKeys: CodingKey {
@@ -17,7 +17,8 @@ struct Coins: Codable {
     enum DataCodingKeys: CodingKey {
         case coins
     }
-
+}
+extension Coins: Codable {
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let nestedContainer = try container.nestedContainer(keyedBy: DataCodingKeys.self, forKey: .data)

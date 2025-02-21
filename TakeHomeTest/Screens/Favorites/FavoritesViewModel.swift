@@ -19,9 +19,9 @@ final class FavoritesViewModel {
 
     // MARK: - Properties
     private(set) var coins: [Coin] = []
-    private let favoriteManager: FavoritesManager
+    private let favoriteManager: FavoritesManaging
 
-    init(favoriteManager: FavoritesManager = .shared) {
+    init(favoriteManager: FavoritesManaging = FavoritesManager.shared) {
         self.favoriteManager = favoriteManager
 
         favoriteManager.addObserver { [weak self] coins in

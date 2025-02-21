@@ -6,8 +6,15 @@
 //
 
 import Foundation
+// First, create a protocol that defines the FavoritesManager interface
+protocol FavoritesManaging {
+    var favorites: [Coin] { get }
+    func addObserver(_ observer: @escaping ([Coin]) -> Void)
+    func toggleFavorite(_ item: Coin)
+    func isFavorite(_ item: Coin) -> Bool
+}
 
-final class FavoritesManager {
+class FavoritesManager: FavoritesManaging {
     static let shared = FavoritesManager()
 
     private init() {}

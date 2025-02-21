@@ -10,7 +10,7 @@ import XCTest
 @testable import TakeHomeTest
 
 extension Coin {
-    static func fake(id: String, name: String, symbol: String, price: Double) -> Coin {
+    static func fake(id: String, name: String, symbol: String = "COIN", price: Double = 1000) -> Coin {
         Coin(uuid: id, name: name, symbol: symbol, iconUrl: "", price: price, change24h: 0, marketCap: 0, volume24h: 0)
     }
 }

@@ -9,7 +9,6 @@ import Foundation
 import OSLog
 import UIKit
 
-@MainActor
 final class CoinsListViewModel: ObservableObject {
     // MARK: - Types
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Coin>
@@ -22,15 +21,21 @@ final class CoinsListViewModel: ObservableObject {
     @Published private(set) var state: CoinsListState = .initial
 
     // MARK: - Private Properties
-    private let favoriteManager: FavoritesManager
+    private let favoriteManager: FavoritesManaging
     private let itemsPerPage = 20
     private let maxPages = 5
+    private let api: CoinRankingAPIProtocol.Type
     private var isFetching = false
 
     // MARK: - Initialization
-    init(initialState: CoinsListState = .initial, favoriteManager: FavoritesManager = .shared) {
+    init(
+        initialState: CoinsListState = .initial,
+        favoriteManager: FavoritesManaging = FavoritesManager.shared,
+        api: CoinRankingAPIProtocol.Type = CoinRankingAPI.self
+    ) {
         self.state = initialState
         self.favoriteManager = favoriteManager
+        self.api = api
     }
 
     // MARK: - Public Interface
@@ -66,7 +71,7 @@ final class CoinsListViewModel: ObservableObject {
         state.error = nil
 
         do {
-            let new = try await CoinRankingAPI.fetchCoins(
+            let new = try await api.fetchCoins(
                 offset: state.currentPage * itemsPerPage,
                 limit: itemsPerPage
             )
