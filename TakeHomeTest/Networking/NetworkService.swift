@@ -13,13 +13,11 @@ protocol NetworkServicing {
 
 // MARK: - Network Service
 final class NetworkService: NetworkServicing {
-    private let baseURL: String
-    private let apiKey: String
+    private let configuration: APIConfiguring
     private let session: URLSession
 
-    init(baseURL: String = "https://api.coinranking.com/v2", apiKey: String, session: URLSession = .shared) {
-        self.baseURL = baseURL
-        self.apiKey = apiKey
+    init(configuration: APIConfiguring, session: URLSession = .shared) {
+        self.configuration = configuration
         self.session = session
     }
 
@@ -29,32 +27,29 @@ final class NetworkService: NetworkServicing {
     }
 
     private func createURLRequest<T: APIRequest>(for request: T) throws -> URLRequest {
-        guard var components = URLComponents(string: baseURL + request.endpoint.path) else {
-            throw NetworkError.invalidURL
-        }
+        var components = URLComponents(string: configuration.baseURL + request.endpoint.path)
+        components?.queryItems = request.queryItems
 
-        components.queryItems = request.queryItems
-
-        guard let url = components.url else {
+        guard let url = components?.url, url.scheme != nil else {
             throw NetworkError.invalidURL
         }
 
         var urlRequest = URLRequest(url: url)
-        urlRequest.setValue(apiKey, forHTTPHeaderField: "x-access-token")
+        urlRequest.setValue(configuration.apiKey, forHTTPHeaderField: "x-access-token")
         urlRequest.cachePolicy = .reloadIgnoringLocalCacheData
 
         return urlRequest
     }
 
     private func executeRequest<T: Decodable>(_ request: URLRequest) async throws -> T {
+        let (data, response) = try await performNetworkCall(request)
+        try validateResponse(response)
+        return try decodeResponse(data)
+    }
+
+    private func performNetworkCall(_ request: URLRequest) async throws -> (Data, URLResponse) {
         do {
-            let (data, response) = try await session.data(for: request)
-            try validateResponse(response)
-            return try decodeResponse(data)
-        } catch let error as NetworkError {
-            throw error
-        } catch let error as DecodingError {
-            throw NetworkError.decodingError(error)
+            return try await session.data(for: request)
         } catch {
             throw NetworkError.networkError(error)
         }
@@ -65,22 +60,27 @@ final class NetworkService: NetworkServicing {
             throw NetworkError.invalidResponse
         }
 
-        switch httpResponse.statusCode {
-        case 200:
-            return
-        case 401:
-            throw NetworkError.unauthorized
-        case 429:
-            throw NetworkError.rateLimitExceeded
-        case 500...599:
-            throw NetworkError.serverError
-        default:
-            throw NetworkError.invalidResponse
+        let statusCode = httpResponse.statusCode
+
+        switch statusCode {
+        case 200: return
+        case 401: throw NetworkError.unauthorized
+        case 429: throw NetworkError.rateLimitExceeded
+        case 500...599: throw NetworkError.serverError
+        case 200...299: throw NetworkError.invalidResponse  // Non-200 success status
+        case 400...499: throw NetworkError.invalidResponse  // Unhandled client error
+        default: throw NetworkError.invalidResponse  // Unknown status code
         }
     }
 
     private func decodeResponse<T: Decodable>(_ data: Data) throws -> T {
-        let decoder = JSONDecoder()
-        return try decoder.decode(T.self, from: data)
+        do {
+            let decoder = JSONDecoder()
+            return try decoder.decode(T.self, from: data)
+        } catch let error as DecodingError {
+            throw NetworkError.decodingError(error)
+        } catch {
+            throw NetworkError.invalidResponse
+        }
     }
 }

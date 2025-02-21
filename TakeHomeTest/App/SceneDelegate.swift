@@ -30,8 +30,11 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
 
-        // Initialize the NetworkService with the retrieved API key
-        let networkService = NetworkService(apiKey: apiKey)
+        // Initialize the API configuration with the provided API key for development environment
+        let apiConfiguration = ApiConfiguration.development(apiKey: apiKey)
+
+        // Initialize the NetworkService with the configured API settings
+        let networkService = NetworkService(configuration: apiConfiguration)
 
         // Create an instance of CoinRankingAPI using the network service
         let api = CoinRankingAPI(networkService: networkService)

@@ -6,6 +6,7 @@
 //
 
 import XCTest
+
 @testable import TakeHomeTest
 
 class NetworkServiceTests: XCTestCase {
@@ -26,12 +27,18 @@ class NetworkServiceTests: XCTestCase {
         config.protocolClasses = [MockURLProtocol.self]
         mockSession = URLSession(configuration: config)
 
-        networkService = NetworkService(baseURL: "https://api.test.com", apiKey: "test-api-key", session: mockSession)
+        networkService = NetworkService(
+            configuration: ApiConfiguration.testing(),
+            session: mockSession
+        )
     }
 
     override func tearDown() {
         mockSession = nil
         networkService = nil
+        MockURLProtocol.mockError = nil
+        MockURLProtocol.requestHandler = nil
+        MockURLProtocol.mockResponse = nil
         super.tearDown()
     }
 
@@ -136,4 +143,147 @@ class NetworkServiceTests: XCTestCase {
             XCTFail("Unexpected error type")
         }
     }
+
+    func testPerform_NetworkError() async {
+        MockURLProtocol.mockError = NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet)
+
+        let request = TestRequest()
+
+        do {
+            _ = try await networkService.perform(request)
+            XCTFail("Expected an error, but got success")
+        } catch let error as NetworkError {
+            if case .networkError = error {
+                // Success
+            } else {
+                XCTFail("Wrong error type received: \(error)")
+            }
+        } catch {
+            XCTFail("Unexpected error type")
+        }
+    }
+
+    // Test malformed JSON response
+    func testPerform_MalformedJSONResponse() async {
+        let malformedData = """
+                {
+                    "uuid": "Qwsogvtv82FCd",
+                    "symbol": "BTC",
+                    MALFORMED_JSON
+                }
+                """.data(using: .utf8)!
+        
+        MockURLProtocol.mockResponse = (
+            malformedData,
+            HTTPURLResponse(
+                url: URL(string: "https://api.test.com")!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: nil)!
+        )
+        
+        let request = TestRequest()
+        
+        do {
+            _ = try await networkService.perform(request)
+            XCTFail("Expected an error, but got success")
+        } catch let error as NetworkError {
+            if case .decodingError = error {
+                // Success
+            } else {
+                XCTFail("Wrong error type received: \(error)")
+            }
+        } catch {
+            XCTFail("Unexpected error type")
+        }
+    }
+
+    // Test empty response
+    func testPerform_EmptyResponse() async {
+        MockURLProtocol.mockResponse = (
+            Data(),
+            HTTPURLResponse(
+                url: URL(string: "https://api.test.com")!,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: nil)!
+        )
+
+        let request = TestRequest()
+
+        do {
+            _ = try await networkService.perform(request)
+            XCTFail("Expected an error, but got success")
+        } catch let error as NetworkError {
+            if case .decodingError = error {
+                // Success
+            } else {
+                XCTFail("Wrong error type received: \(error)")
+            }
+        } catch {
+            XCTFail("Unexpected error type")
+        }
+    }
+    // Test request header validation
+    func testPerform_RequestHeadersValidation() async {
+        var capturedRequest: URLRequest?
+        MockURLProtocol.requestHandler = { request in
+            capturedRequest = request
+            throw NSError(domain: NSURLErrorDomain, code: NSURLErrorCancelled)
+        }
+
+        let request = TestRequest()
+
+        do {
+            _ = try await networkService.perform(request)
+        } catch {
+            // Verify headers
+            XCTAssertEqual(capturedRequest?.value(forHTTPHeaderField: "x-access-token"), "test-api-key")
+            XCTAssertEqual(capturedRequest?.cachePolicy, .reloadIgnoringLocalCacheData)
+        }
+    }
+    func testPerform_InvalidURL() async {
+        let configuration = ApiConfiguration.testing(environment: MockEnvironment(baseURL: " "))
+        let networkWithInvalidURL = NetworkService(
+            configuration: configuration,
+            session: mockSession
+        )
+        let request = TestRequest()
+
+        do {
+            _ = try await networkWithInvalidURL.perform(request)
+            XCTFail("Expected an error, but got success")
+        } catch let error as NetworkError {
+            XCTAssertEqual(error.localizedDescription, NetworkError.invalidURL.localizedDescription)
+        } catch {
+            XCTFail("Unexpected error type")
+        }
+    }
+
+    // Test non-HTTP response
+    func testPerform_NonHTTPResponse() async {
+        MockURLProtocol.mockResponse = (
+            Data(),
+            URLResponse(
+                url: URL(string: "https://api.test.com")!,
+                mimeType: nil,
+                expectedContentLength: 0,
+                textEncodingName: nil)
+        )
+
+        let request = TestRequest()
+
+        do {
+            _ = try await networkService.perform(request)
+            XCTFail("Expected an error, but got success")
+        } catch let error as NetworkError {
+            XCTAssertEqual(error.localizedDescription, NetworkError.invalidResponse.localizedDescription)
+        } catch {
+            XCTFail("Unexpected error type")
+        }
+    }
+}
+
+struct MockEnvironment: EnvironmentProtocol {
+    var baseURL: String
 }

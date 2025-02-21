@@ -14,7 +14,7 @@ extension CoinRankingAPI {
 
         let offset: Int
         let limit: Int
-        let endpoint: Endpoint = .coins(offset: 0, limit: 0)
+        var endpoint: Endpoint { .coins(offset: 0, limit: 0) }
 
         var queryItems: [URLQueryItem] {
             [
