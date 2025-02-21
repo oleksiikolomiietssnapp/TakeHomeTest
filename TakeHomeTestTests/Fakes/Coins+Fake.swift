@@ -9,7 +9,7 @@ import Foundation
 @testable import TakeHomeTest
 
 extension Coin {
-    static func fake(id: String, name: String, symbol: String = "COIN", price: Double = 1000) -> Coin {
-        Coin(uuid: id, name: name, symbol: symbol, iconUrl: "", price: price, change24h: 0, marketCap: 0, volume24h: 0)
+    static func fake(id: String, name: String, symbol: String = "COIN", price: Double = 1000, iconURL: String? = nil) -> Coin {
+        Coin(uuid: id, name: name, symbol: symbol, iconUrl: iconURL ?? "", price: price, change24h: 0, marketCap: 0, volume24h: 0)
     }
 }

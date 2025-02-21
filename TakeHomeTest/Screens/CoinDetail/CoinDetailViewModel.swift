@@ -5,8 +5,8 @@
 //  Created by Oleksii Kolomiiets on 20.02.2025.
 //
 
-import Foundation
 import Charts
+import Foundation
 import OSLog
 
 final class CoinDetailViewModel: ObservableObject {
@@ -22,13 +22,19 @@ final class CoinDetailViewModel: ObservableObject {
     @Published var selectedPoint: CoinHistoryPoint?
 
     public let coin: Coin
+    private let api: CoinRankingAPIProtocol.Type
 
     var timeframes: [Timeframe] {
         Timeframe.allCases
     }
 
-    init(coin: Coin) {
+    init(
+        coin: Coin,
+        api: CoinRankingAPIProtocol.Type = CoinRankingAPI.self
+    ) {
         self.coin = coin
+        self.api = api
+
         Task {
             await fetchChartData()
         }
@@ -39,7 +45,7 @@ final class CoinDetailViewModel: ObservableObject {
             isLoading = true
         }
         do {
-            let coinHistory = try await CoinRankingAPI.fetchCoinHistory(
+            let coinHistory = try await api.fetchCoinHistory(
                 id: coin.uuid,
                 timePeriod: selectedTimeframe.rawValue
             )
@@ -49,9 +55,10 @@ final class CoinDetailViewModel: ObservableObject {
                 self.isLoading = false
             }
         } catch {
-            os_log(.error,
-                   "Error fetching chart data: %@",
-                   error.localizedDescription)
+            os_log(
+                .error,
+                "Error fetching chart data: %@",
+                error.localizedDescription)
             await MainActor.run {
                 self.coinHistory = nil
                 isLoading = false

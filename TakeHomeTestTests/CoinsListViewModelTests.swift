@@ -18,8 +18,7 @@ final class CoinsListViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         mockFavoritesManager = MockFavoritesManager()
-        MockCoinRankingAPI.mockCoins = .init(coins: [])
-        MockCoinRankingAPI.shouldThrowError = false
+        MockCoinRankingAPI.reset()
         sut = CoinsListViewModel(
             favoriteManager: mockFavoritesManager,
             api: MockCoinRankingAPI.self
@@ -29,8 +28,7 @@ final class CoinsListViewModelTests: XCTestCase {
     override func tearDown() {
         sut = nil
         mockFavoritesManager = nil
-        MockCoinRankingAPI.mockCoins = .init(coins: [])
-        MockCoinRankingAPI.shouldThrowError = false
+        MockCoinRankingAPI.reset()
         super.tearDown()
     }
 
@@ -105,7 +103,7 @@ final class CoinsListViewModelTests: XCTestCase {
     func testLoadNextPage_WhenGetApiError() async {
         // Given
         sut.inject(coins: createMockCoins(count: 100))
-        MockCoinRankingAPI.shouldThrowError = true
+        MockCoinRankingAPI.mockError = MockError.testError
 
         // When
         for _ in 0...5 {
@@ -191,7 +189,6 @@ final class CoinsListViewModelTests: XCTestCase {
         // Then
         XCTAssertFalse(mockFavoritesManager.favorites.contains(coin))
     }
-
 
     func testIsFavorite_ReturnsFavoriteManagerResult() {
         // Given

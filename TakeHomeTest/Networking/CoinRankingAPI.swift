@@ -9,6 +9,7 @@ import Foundation
 
 protocol CoinRankingAPIProtocol {
     static func fetchCoins(offset: Int, limit: Int) async throws -> Coins
+    static func fetchCoinHistory(id: String, timePeriod: String) async throws -> CoinHistory
 }
 
 // MARK: - Network Layer
