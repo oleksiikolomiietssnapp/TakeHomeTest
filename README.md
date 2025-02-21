@@ -55,3 +55,13 @@ The app fetches cryptocurrency data from the CoinRanking API and presents it in 
 | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 20 13](https://github.com/user-attachments/assets/1605f467-ac6a-499e-a5b3-53a7f65d15f2) | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 20 37](https://github.com/user-attachments/assets/1cf5d393-eae1-4694-a128-68e72af8bd19) | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 20 33](https://github.com/user-attachments/assets/fa46be1e-7bca-486f-8166-b58b5cbc8949) |
 | --- | --- | --- |
 | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 20 18](https://github.com/user-attachments/assets/a5f1b171-c487-4394-a5f6-98541af58057) | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 21 55](https://github.com/user-attachments/assets/5f14fb9c-4722-4ec3-8122-4fe45f8d8d4e) | ![Simulator Screenshot - iPhone 16 - 2025-02-20 at 22 20 41](https://github.com/user-attachments/assets/a4ff4d88-7379-4a29-877a-087f008bc81b) |
+
+## TODO:
+- Improve raw values usage
+- Refactor smaller views for better modularity
+- Optimize API request handling and caching
+- Store Favorites for permanent access
+- Improve UI animations for a more polished experience
+- Add accessibility support for better usability
+
+---
