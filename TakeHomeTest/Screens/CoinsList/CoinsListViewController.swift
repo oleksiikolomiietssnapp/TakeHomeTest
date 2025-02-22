@@ -56,6 +56,8 @@ final class CoinsListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = dataSource
         tableView.register(CoinTableViewCell.self, forCellReuseIdentifier: "CoinCell")
+
+        tableView.alpha = 0  // Hide initially
     }
 
     private func loadInitialData() {
@@ -88,22 +90,24 @@ final class CoinsListViewController: UIViewController {
         title = "Top 100 Coins"
         navigationController?.navigationBar.prefersLargeTitles = true
 
-        let menu = UIMenu(title: "Sort Options", children: [
-            UIAction(
-                title: "Highest Price",
-                image: UIImage(systemName: "chart.line.uptrend.xyaxis")
-            ) { [weak self] _ in
-                self?.viewModel.sortCoins(by: .price)
-                self?.updateUI()
-            },
-            UIAction(
-                title: "Best Performance (24h)",
-                image: UIImage(systemName: "timer")
-            ) { [weak self] _ in
-                self?.viewModel.sortCoins(by: .performance24h)
-                self?.updateUI()
-            }
-        ])
+        let menu = UIMenu(
+            title: "Sort Options",
+            children: [
+                UIAction(
+                    title: "Highest Price",
+                    image: UIImage(systemName: "chart.line.uptrend.xyaxis")
+                ) { [weak self] _ in
+                    self?.viewModel.sortCoins(by: .price)
+                    self?.updateUI()
+                },
+                UIAction(
+                    title: "Best Performance (24h)",
+                    image: UIImage(systemName: "timer")
+                ) { [weak self] _ in
+                    self?.viewModel.sortCoins(by: .performance24h)
+                    self?.updateUI()
+                },
+            ])
 
         let barButton = UIBarButtonItem(
             title: "Sort Options",
@@ -120,9 +124,18 @@ final class CoinsListViewController: UIViewController {
 
     // MARK: - Update Data
     private func updateUI(animate: Bool = true) {
-        dataSource.apply(viewModel.snapshot(), animatingDifferences: animate)
+        dataSource.apply(viewModel.snapshot(), animatingDifferences: animate) { [weak self] in
+            self?.fadeInTableViewIfNeeded()
+        }
     }
 
+    private func fadeInTableViewIfNeeded() {
+        guard tableView.alpha != 1 else { return }
+
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn) { [weak self] in
+            self?.tableView.alpha = 1
+        }
+    }
 }
 
 extension CoinsListViewController: UITableViewDelegate {
@@ -160,8 +173,8 @@ extension CoinsListViewController: UITableViewDelegate {
             }
         } else {
             configuration = SwipeActions.createFavoriteConfiguration { [weak self] in
-                    self?.addToFavoritesItem(coin)
-                }
+                self?.addToFavoritesItem(coin)
+            }
         }
 
         configuration.performsFirstActionWithFullSwipe = false
