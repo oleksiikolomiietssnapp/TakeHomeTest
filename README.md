@@ -110,5 +110,6 @@ This means the API has reached its request limit. To resolve this:
 - Wait for some time and try again later.  
 - Ensure you're not making excessive requests within a short period.  
 - If possible, use API keys with higher rate limits. 
+[Documentation](https://developers.coinranking.com/api/documentation/rate-limit)
 
 ---
