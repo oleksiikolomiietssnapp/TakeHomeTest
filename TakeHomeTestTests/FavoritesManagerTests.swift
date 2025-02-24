@@ -32,13 +32,13 @@ final class FavoritesManagerTests: XCTestCase {
     
     // MARK: - Initial State Tests
     
-    func test_initialState_favoritesIsEmpty() {
+    func testInitialState_favoritesIsEmpty() {
         XCTAssertTrue(sut.favorites.isEmpty)
     }
     
     // MARK: - Toggle Favorite Tests
     
-    func test_toggleFavorite_whenItemNotInFavorites_addsItem() {
+    func testToggleFavorite_whenItemNotInFavorites_addsItem() {
         // Given
         XCTAssertFalse(sut.isFavorite(testCoin1))
         
@@ -50,7 +50,7 @@ final class FavoritesManagerTests: XCTestCase {
         XCTAssertEqual(sut.favorites.count, 1)
     }
     
-    func test_toggleFavorite_whenItemInFavorites_removesItem() {
+    func testToggleFavorite_whenItemInFavorites_removesItem() {
         // Given
         sut.toggleFavorite(testCoin1)
         XCTAssertTrue(sut.isFavorite(testCoin1))
@@ -63,7 +63,7 @@ final class FavoritesManagerTests: XCTestCase {
         XCTAssertTrue(sut.favorites.isEmpty)
     }
     
-    func test_toggleFavorite_multipleItems_maintainsCorrectOrder() {
+    func testToggleFavorite_multipleItems_maintainsCorrectOrder() {
         // When
         sut.toggleFavorite(testCoin1)
         sut.toggleFavorite(testCoin2)
@@ -76,7 +76,7 @@ final class FavoritesManagerTests: XCTestCase {
     
     // MARK: - Observer Tests
     
-    func test_addObserver_immediatelyNotifiesWithCurrentState() {
+    func testAddObserverImmediatelyNotifiesWithCurrentState() {
         // Given
         sut.toggleFavorite(testCoin1)
         var receivedFavorites: [Coin]?
@@ -90,7 +90,7 @@ final class FavoritesManagerTests: XCTestCase {
         XCTAssertEqual(receivedFavorites, [testCoin1])
     }
     
-    func test_toggleFavorite_notifiesAllObservers() {
+    func testToggleFavorite_notifiesAllObservers() {
         // Given
         var observer1Called = false
         var observer2Called = false
@@ -117,7 +117,7 @@ final class FavoritesManagerTests: XCTestCase {
         XCTAssertEqual(observer2Favorites, [testCoin1])
     }
     
-    func test_multipleToggles_observersReceiveCorrectUpdates() {
+    func testMultipleToggles_observersReceiveCorrectUpdates() {
         // Given
         var latestFavorites: [Coin]?
         sut.addObserver { favorites in
@@ -139,11 +139,11 @@ final class FavoritesManagerTests: XCTestCase {
     
     // MARK: - IsFavorite Tests
     
-    func test_isFavorite_whenItemNotInFavorites_returnsFalse() {
+    func testIsFavorite_whenItemNotInFavorites_returnsFalse() {
         XCTAssertFalse(sut.isFavorite(testCoin1))
     }
     
-    func test_isFavorite_whenItemInFavorites_returnsTrue() {
+    func testIsFavorite_whenItemInFavorites_returnsTrue() {
         // Given
         sut.toggleFavorite(testCoin1)
         

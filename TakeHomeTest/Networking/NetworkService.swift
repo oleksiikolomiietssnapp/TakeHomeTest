@@ -7,12 +7,18 @@
 
 import Foundation
 
+/// Protocol defining the core networking capabilities
 protocol NetworkServicing {
+    /// Performs a network request and returns the decoded response
+    /// - Parameter request: The API request to perform
+    /// - Returns: The decoded response matching the request's Response type
+    /// - Throws: NetworkError if the request fails
     func perform<T: APIRequest>(_ request: T) async throws -> T.Response
 }
 
-// MARK: - Network Service
+/// Main networking service responsible for executing API requests
 final class NetworkService: NetworkServicing {
+    // MARK: - Properties
     private let configuration: APIConfiguring
     private let session: URLSession
 
@@ -21,11 +27,14 @@ final class NetworkService: NetworkServicing {
         self.session = session
     }
 
+    // MARK: - Public Methods
     func perform<T: APIRequest>(_ request: T) async throws -> T.Response {
         let urlRequest = try createURLRequest(for: request)
         return try await executeRequest(urlRequest)
     }
 
+    // MARK: - Private Methods
+    /// Creates a URLRequest from an APIRequest
     private func createURLRequest<T: APIRequest>(for request: T) throws -> URLRequest {
         var components = URLComponents(string: configuration.baseURL + request.endpoint.path)
         components?.queryItems = request.queryItems
@@ -36,17 +45,19 @@ final class NetworkService: NetworkServicing {
 
         var urlRequest = URLRequest(url: url)
         urlRequest.setValue(configuration.apiKey, forHTTPHeaderField: "x-access-token")
-        urlRequest.cachePolicy = .reloadIgnoringLocalCacheData
+        urlRequest.cachePolicy = .returnCacheDataElseLoad
 
         return urlRequest
     }
 
+    /// Executes a network request and decodes the response
     private func executeRequest<T: Decodable>(_ request: URLRequest) async throws -> T {
         let (data, response) = try await performNetworkCall(request)
         try validateResponse(response)
         return try decodeResponse(data)
     }
 
+    /// Performs the actual network call
     private func performNetworkCall(_ request: URLRequest) async throws -> (Data, URLResponse) {
         do {
             return try await session.data(for: request)
@@ -73,6 +84,7 @@ final class NetworkService: NetworkServicing {
         }
     }
 
+    /// Decodes the response data into the expected type
     private func decodeResponse<T: Decodable>(_ data: Data) throws -> T {
         do {
             let decoder = JSONDecoder()

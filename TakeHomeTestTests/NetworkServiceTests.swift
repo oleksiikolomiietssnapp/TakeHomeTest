@@ -43,7 +43,7 @@ class NetworkServiceTests: XCTestCase {
     }
 
     // Test successful response
-    func testPerform_SuccessfulResponse() async throws {
+    func testPerformSuccessfulResponse() async throws {
         let expectedData = """
             {
                 "uuid": "Qwsogvtv82FCd",
@@ -76,7 +76,7 @@ class NetworkServiceTests: XCTestCase {
     }
 
     // Test unauthorized error (401)
-    func testPerform_UnauthorizedError() async {
+    func testPerformUnauthorizedError() async {
         MockURLProtocol.mockResponse = (
             Data(),
             HTTPURLResponse(
@@ -99,7 +99,7 @@ class NetworkServiceTests: XCTestCase {
     }
 
     // Test rate limit exceeded (429)
-    func testPerform_RateLimitExceeded() async {
+    func testPerformRateLimitExceeded() async {
         MockURLProtocol.mockResponse = (
             Data(),
             HTTPURLResponse(
@@ -122,7 +122,7 @@ class NetworkServiceTests: XCTestCase {
     }
 
     // Test server error (500)
-    func testPerform_ServerError() async {
+    func testPerformServerError() async {
         MockURLProtocol.mockResponse = (
             Data(),
             HTTPURLResponse(
@@ -144,8 +144,9 @@ class NetworkServiceTests: XCTestCase {
         }
     }
 
-    func testPerform_NetworkError() async {
-        MockURLProtocol.mockError = NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet)
+    func testPerformNetworkError() async {
+        let expectedError = NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet)
+        MockURLProtocol.mockError = expectedError
 
         let request = TestRequest()
 
@@ -154,7 +155,7 @@ class NetworkServiceTests: XCTestCase {
             XCTFail("Expected an error, but got success")
         } catch let error as NetworkError {
             if case .networkError = error {
-                // Success
+                XCTAssertEqual(error.localizedDescription, NetworkError.networkError(expectedError).localizedDescription)
             } else {
                 XCTFail("Wrong error type received: \(error)")
             }
@@ -164,7 +165,7 @@ class NetworkServiceTests: XCTestCase {
     }
 
     // Test malformed JSON response
-    func testPerform_MalformedJSONResponse() async {
+    func testPerformMalformedJSONResponse() async {
         let malformedData = """
                 {
                     "uuid": "Qwsogvtv82FCd",
@@ -172,7 +173,14 @@ class NetworkServiceTests: XCTestCase {
                     MALFORMED_JSON
                 }
                 """.data(using: .utf8)!
-        
+        let context = DecodingError.Context(
+            codingPath: [],
+            debugDescription: "The data couldn’t be read because it isn’t in the correct format."
+        )
+
+        let error = DecodingError.dataCorrupted(context)
+        let expectedError = NetworkError.decodingError(error)
+
         MockURLProtocol.mockResponse = (
             malformedData,
             HTTPURLResponse(
@@ -189,7 +197,7 @@ class NetworkServiceTests: XCTestCase {
             XCTFail("Expected an error, but got success")
         } catch let error as NetworkError {
             if case .decodingError = error {
-                // Success
+                XCTAssertEqual(error.localizedDescription, expectedError.localizedDescription)
             } else {
                 XCTFail("Wrong error type received: \(error)")
             }
@@ -199,7 +207,7 @@ class NetworkServiceTests: XCTestCase {
     }
 
     // Test empty response
-    func testPerform_EmptyResponse() async {
+    func testPerformEmptyResponse() async {
         MockURLProtocol.mockResponse = (
             Data(),
             HTTPURLResponse(
@@ -225,7 +233,7 @@ class NetworkServiceTests: XCTestCase {
         }
     }
     // Test request header validation
-    func testPerform_RequestHeadersValidation() async {
+    func testPerformRequestHeadersValidation() async {
         var capturedRequest: URLRequest?
         MockURLProtocol.requestHandler = { request in
             capturedRequest = request
@@ -239,10 +247,10 @@ class NetworkServiceTests: XCTestCase {
         } catch {
             // Verify headers
             XCTAssertEqual(capturedRequest?.value(forHTTPHeaderField: "x-access-token"), "test-api-key")
-            XCTAssertEqual(capturedRequest?.cachePolicy, .reloadIgnoringLocalCacheData)
+            XCTAssertEqual(capturedRequest?.cachePolicy, .returnCacheDataElseLoad)
         }
     }
-    func testPerform_InvalidURL() async {
+    func testPerformInvalidURL() async {
         let configuration = ApiConfiguration.testing(environment: MockEnvironment(baseURL: " "))
         let networkWithInvalidURL = NetworkService(
             configuration: configuration,
@@ -261,7 +269,7 @@ class NetworkServiceTests: XCTestCase {
     }
 
     // Test non-HTTP response
-    func testPerform_NonHTTPResponse() async {
+    func testPerformNonHTTPResponse() async {
         MockURLProtocol.mockResponse = (
             Data(),
             URLResponse(
@@ -282,6 +290,29 @@ class NetworkServiceTests: XCTestCase {
             XCTFail("Unexpected error type")
         }
     }
+
+    func testPerformUnsupportedError() async {
+        MockURLProtocol.mockResponse = (
+            Data(),
+            HTTPURLResponse(
+                url: URL(string: "https://api.test.com")!,
+                statusCode: 602,
+                httpVersion: nil,
+                headerFields: nil)!
+        )
+
+        let request = TestRequest()
+
+        do {
+            _ = try await networkService.perform(request)
+            XCTFail("Expected an error, but got success")
+        } catch let error as NetworkError {
+            XCTAssertEqual(error.localizedDescription, NetworkError.invalidResponse.localizedDescription)
+        } catch {
+            XCTFail("Unexpected error type")
+        }
+    }
+
 }
 
 struct MockEnvironment: EnvironmentProtocol {
