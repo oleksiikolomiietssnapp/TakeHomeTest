@@ -91,7 +91,7 @@ The app fetches cryptocurrency data from the CoinRanking API and presents it in 
 
 ## UI test recording
 
-https://github.com/user-attachments/assets/83c23842-8be1-43f6-80d0-0f862b6af3e5
+https://github.com/user-attachments/assets/d0f79828-8f5a-4f41-a0f7-e8e6d736431b
 
 ## TODO:
 - Move metrics values to Constants for consistency and reduce hardcoding.
